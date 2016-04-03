@@ -51,4 +51,9 @@ module.exports = class
     for own k, v of result
       result[k] = result[k] / count
 
-    result
+    sortFn = (a, b) -> result[b] - result[a]
+    sorted = []
+    for k in Object.keys(result).sort sortFn
+      sorted[k] = result[k]
+
+    sorted
