@@ -8,4 +8,5 @@ module.exports = class
 
   find: (key) ->
     domains = @domains
-    if domains.hasOwnProperty(key) then domains[key]
+    possibles = if domains.hasOwnProperty(key) then domains[key]
+    return null if ! possibles?
