@@ -1,32 +1,32 @@
 chai = require 'chai'
 expect = chai.expect
 
-Domains = require '../src/domains'
+TopicDetection = require '../src/topic-detection'
 
-describe 'Domains', ->
+describe 'TopicDetection', ->
 
   it 'should have a constructor', (done) ->
-    domains = new Domains()
-    expect(domains).to.exist
+    detector = new TopicDetection()
+    expect(detector).to.exist
     done()
 
   describe 'word tests', () ->
 
-    domains = new Domains()
+    detector = new TopicDetection()
 
     it 'should return null for a non-word', (done) ->
-      expect(domains.find('dvwyvsw')).to.be.null
+      expect(detector.find('dvwyvsw')).to.be.null
       done()
 
     it 'should return {"psychology":1} for "zoopsia"', (done) ->
-      result = domains.find('zoopsia')
+      result = detector.find('zoopsia')
       expect(result).to.exist
       expect(result).to.have.property('psychology').and.equal(1)
       expect(Object.keys(result)).to.have.members(['psychology'])
       done()
 
     it 'should return {"transport":0.5,"engineering":0.5} for "zoom"', (done) ->
-      result = domains.find('zoom')
+      result = detector.find('zoom')
       expect(result).to.exist
       expect(result).to.have.property('transport').and.equal(0.5)
       expect(result).to.have.property('engineering').and.equal(0.5)
@@ -35,7 +35,7 @@ describe 'Domains', ->
 
   describe 'passage tests', () ->
 
-    domains = new Domains()
+    detector = new TopicDetection()
 
     it 'should correctly classify a paragraph as "politics"', (done) ->
 
@@ -50,7 +50,7 @@ or federation may decentralize powers to regional or local entities in a
 confederal form.
 """
 
-      result = domains.topics(text)
+      result = detector.topics(text)
       expect(result).to.exist
       expect(Object.keys(result).length).to.be.above(1)
       sortFn = (a, b) -> result[b] - result[a]
@@ -74,7 +74,7 @@ of the defendant being guilty is 90% makes the prosecutor's fallacy (in a very
 simple form).
 """
 
-      result = domains.topics(text)
+      result = detector.topics(text)
       expect(result).to.exist
       expect(Object.keys(result).length).to.be.above(1)
       sortFn = (a, b) -> result[b] - result[a]
