@@ -6,6 +6,7 @@ module.exports = class
   domains: require './data/domains.json'
   hierarchy: require './data/domain_hierarchy.json'
 
+  ## Handles the topic breakdown for a single word
   find: (key) ->
     domains = @domains
     hierarchy = @hierarchy
@@ -28,3 +29,26 @@ module.exports = class
       table[k] = table[k] / count
 
     table
+
+  tokenize = (passage) ->
+    passage.split /[\s\.,!?]+/
+
+  ## Handles the topic breakdown for a passage of text
+  topics: (passage) ->
+    tokens = tokenize passage
+
+    count = 0
+    result = {}
+    for token in tokenize passage
+      categories = @find token
+      if categories?
+        for own k, v of categories
+          result[k] ?= 0
+          result[k] += v
+          count++
+
+    return null if count == 0
+    for own k, v of result
+      result[k] = result[k] / count
+
+    result
